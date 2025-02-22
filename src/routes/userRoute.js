@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
 	try {
 		const user = await prisma.user.findUnique({
-			where: { uid: req.params.id },
+			where: { uid: req.params.user_id },
 			select: {
 				uid: true,
 				name: true,
