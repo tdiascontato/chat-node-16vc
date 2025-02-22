@@ -12,14 +12,14 @@ const app = express();
 const server = createServer(app);
 
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://127.0.0.1:5500'], // Altere para seus domínios
+  origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000', 'http://127.0.0.1:5500'], // Mesmos domínios do Express
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500'],
     methods: ['GET', 'POST'],
     credentials: true
   }

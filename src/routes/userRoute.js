@@ -11,7 +11,7 @@ router.get('/:id', async (req, res) => {
         uid: true,
         name: true,
         email: true,
-        profilePicture: true
+        profilePicture: true,
       }
     });
 
