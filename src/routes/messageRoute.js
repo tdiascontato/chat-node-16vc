@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/", async (req, res) => {
 	try {
-		const { conversation_id, sender_id, message, is_ai } = req.body;
+		const { conversation_id, user_id, sender_id, message, is_ai } = req.body;
 		const io = req.app.get("io");
 		let newMessage = {};
 
@@ -15,9 +15,18 @@ router.post("/", async (req, res) => {
 				data: {
 					text: message,
 					sender: { connect: { uid: sender_id } },
-					conversation: { connect: { id: Number.parseInt(conversation_id) } },
+					conversation: {
+						connectOrCreate: {
+							where: { id: Number.parseInt(conversation_id) },
+							create: {
+								isAi: false,
+								user: { connect: { uid: user_id } },
+								createdAt: new Date(),
+							},
+						},
+					},
 				},
-				include: { sender: true },
+				include: { sender: true, conversation: true },
 			});
 		} else {
 			const ai = new OpenAiService();
@@ -30,13 +39,14 @@ router.post("/", async (req, res) => {
 			newMessage.createdAt = new Date();
 		}
 
-		io.to(conversation_id).emit("newMessage", {
+		io.to(newMessage.conversation.id).emit("newMessage", {
 			sender_id: newMessage.sender.uid,
 			message: newMessage.text,
 			timestamp: newMessage.createdAt,
 		});
 
 		res.json({
+			conversation_id: newMessage.conversation.id,
 			message_id: newMessage.id,
 			message: newMessage.text,
 			timestamp: newMessage.createdAt,
