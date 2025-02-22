@@ -1,13 +1,13 @@
 import { Router } from "express";
 import { authenticate } from "../middleware/auth";
-import { MessagesModel } from "../models/messagesModel";
+import prisma from "../prisma";
 
 const router = Router();
 
 router.get("/:conversation_id", authenticate, async (req, res) => {
-	const data = await MessagesModel.getByConversationId(
-		req.params.conversation_id,
-	);
+	const data = await prisma.message.findMany({
+		where: { conversationId },
+	});
 
 	res.json(data);
 });
