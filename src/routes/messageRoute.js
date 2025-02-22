@@ -9,7 +9,6 @@ router.post("/", async (req, res) => {
 	try {
 		console.log(req.body);
 		const { conversation_id, user_id, sender_id, message, is_ai } = req.body;
-		const io = req.app.get("io");
 		let newMessage = {};
 
 		if (!is_ai) {
@@ -37,6 +36,8 @@ router.post("/", async (req, res) => {
 
 			const aiMessage = await ai.sendMessage(threadId, message);
 
+			console.log({ aiMessage });
+
 			const convers = await prisma.conversation.create({
 				data: {
 					id: randomUUID(),
@@ -49,12 +50,6 @@ router.post("/", async (req, res) => {
 			newMessage.text = aiMessage;
 			newMessage.createdAt = new Date();
 		}
-
-		io.to(newMessage.conversation.id).emit("newMessage", {
-			sender_id: user_id,
-			message: newMessage.text,
-			timestamp: newMessage.createdAt,
-		});
 
 		res.json({
 			conversation_id: newMessage.conversation.id,
