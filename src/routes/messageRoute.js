@@ -25,7 +25,7 @@ router.post("/", async (req, res) => {
 
 			const aiMessage = await ai.sendMessage(threadId, message);
 
-			newMessage.sender.uid = sender_id;
+			newMessage.sender.uid = null;
 			newMessage.text = aiMessage;
 			newMessage.createdAt = new Date();
 		}
