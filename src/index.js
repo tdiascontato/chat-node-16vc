@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 3000;
+const PORT = 4000;
 server.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
   prisma.$connect().then(() => console.log('Conectado ao banco de dados'));
