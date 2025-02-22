@@ -24,6 +24,3 @@ build/
 .yarnrc
 .pnp.*
 .yarn-integrity
-
-package-lock.json
-yarn.lock
