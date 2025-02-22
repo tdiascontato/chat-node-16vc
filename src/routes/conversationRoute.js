@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { authenticate } from "../middleware/auth";
 import prisma from "../prisma";
 
 const router = Router();
 
-router.get("/:conversation_id", authenticate, async (req, res) => {
+router.get("/:conversation_id", async (req, res) => {
 	const data = await prisma.message.findMany({
 		where: { conversationId },
 	});
@@ -12,7 +11,7 @@ router.get("/:conversation_id", authenticate, async (req, res) => {
 	res.json(data);
 });
 
-router.post("/:conversation_id/connect", authenticate, (req, res) => {
+router.post("/:conversation_id/connect", (req, res) => {
 	res.json({
 		status: "WebSocket connected",
 		conversation_id: req.params.conversation_id,
