@@ -7,7 +7,7 @@ router.get("/", async (req, res) => {
 	try {
 		const users = await prisma.user.findMany({
 			select: {
-				uid: true,
+				id: true,
 				name: true,
 			},
 		});
@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
 	try {
 		const user = await prisma.user.create({
-			data: { name: req.body.name, uid: req.body.uid, createdAt: new Date() },
+			data: { name: req.body.name, id: req.body.id, createdAt: new Date() },
 		});
 
 		res.json(user);
@@ -33,9 +33,9 @@ router.post("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
 	try {
 		const user = await prisma.user.findUnique({
-			where: { uid: req.params.user_id },
+			where: { id: req.params.id },
 			select: {
-				uid: true,
+				id: true,
 				name: true,
 				email: true,
 				profilePicture: true,
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
 		if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
 
 		res.json({
-			user_id: user.uid,
+			user_id: user.id,
 			name: user.name,
 			email: user.email,
 			profile_picture: user.profilePicture,
