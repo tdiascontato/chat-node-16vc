@@ -120,6 +120,18 @@ This document provides the API specification for a real-time chat application. T
   }]
   ```
 
+### POST /api/users/
+
+- **Description**: Save user rofile.
+- **Response (200 OK)**:
+- **Request Body (JSON)**:
+
+  ```json
+   {
+    "name": "user",
+    "uid": "user@example.com",
+  }
+  ```
 ---
 
 ## Error Handling
