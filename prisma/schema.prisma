@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./chat.db"
+}
+
+model User {
+  id             Int            @id @default(autoincrement())
+  uid            String         @unique
+  name           String
+  email          String?
+  profilePicture String?        @map("profile_picture")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  conversations  Conversation[]
+  messages       Message[]
+  @@map("users")
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  text           String
+  createdAt      DateTime     @default(now()) @map("created_at")
+  sender         User         @relation(fields: [senderId], references: [id])
+  senderId       Int          @map("sender_id")
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId Int          @map("conversation_id")
+  @@map("messages")
+}
+
+model Conversation {
+  id             Int          @id @default(autoincrement())
+  is_ai          Boolean      @default(false)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  userId         Int?         @map("user_id")
+  user           User?        @relation(fields: [userId], references: [id])
+  messages       Message[]
+  @@map("conversations")
+}
+
