@@ -1,6 +1,6 @@
 # Chat Application API Documentation
 
-This document provides the API specification for a real-time chat application. The application allows users to register, login, create and manage conversations, and send messages.
+This document provides the API specification for a real-time chat application. The application allows users to register, login, create and manage conversations, and send messages. WebSocket is used to handle real-time messaging.
 
 ---
 
@@ -13,6 +13,7 @@ This document provides the API specification for a real-time chat application. T
    - [GET /api/conversations](#get-apiconversations)
    - [GET /api/conversations/{conversation_id}](#get-apiconversationsconversation_id)
    - [POST /api/conversations](#post-apiconversations)
+   - [POST /api/conversations/{conversation_id}/connect](#post-apiconversationsconversation_idconnect)
 3. [Messages](#messages)
    - [POST /api/messages](#post-apimessages)
 4. [User Profile](#user-profile)
@@ -122,24 +123,18 @@ This document provides the API specification for a real-time chat application. T
   ]
   ```
 
-### POST /api/conversations
+### POST /api/conversations/{conversation_id}/connect
 
-- **Description**: Creates a new conversation.
+- **Description**: Establishes a WebSocket connection for real-time communication in the specific conversation.
 - **Headers**:
   - `Authorization`: `Bearer <JWT_token>`
-- **Request Body (JSON)**:
-
-  ```json
-  {
-    "user_id": "uuid",
-    "is_ai": false
-  }
-  ```
-
+- **Parameters**:
+  - `conversation_id`: ID of the conversation to connect to.
 - **Response (200 OK)**:
 
   ```json
   {
+    "status": "WebSocket connected",
     "conversation_id": "uuid"
   }
   ```
@@ -176,26 +171,6 @@ This document provides the API specification for a real-time chat application. T
 ---
 
 ## User Profile
-
-### GET /api/users
-
-- **Description**: Retrieves a list of all users in the system.
-- **Headers**:
-  - `Authorization`: `Bearer <JWT_token>`
-- **Response (200 OK)**:
-
-```json
-[
-  {
-    "id": "uuid",
-    "name": "John Doe"
-  },
-  {
-    "id": "uuid",
-    "name": "Jane Smith"
-  }
-]
-```
 
 ### GET /api/users/{user_id}
 
@@ -238,3 +213,4 @@ All responses will include the following error structure when appropriate:
 
 - **JWT Token**: All routes that require authentication will need a valid JWT token included in the `Authorization` header as `Bearer <JWT_token>`.
 - **is_ai flag**: In the `POST /api/conversations` route, if `is_ai` is set to `true`, the conversation will be between the user and an AI agent. If `is_ai` is `false`, the conversation will be between two users.
+- **WebSocket**: A WebSocket connection is established for real-time communication in a conversation by calling the `POST /api/conversations/{conversation_id}/connect` endpoint. Once the WebSocket connection is established, messages can be sent and received in real-time.
