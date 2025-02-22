@@ -21,89 +21,11 @@ This document provides the API specification for a real-time chat application. T
 
 ---
 
-## Authentication
-
-### POST /api/auth/register
-
-- **Description**: Registers a new user.
-- **Request Body (JSON)**:
-
-```json
-{
-  "email": "user@example.com",
-  "password": "password123",
-  "name": "John Doe"
-}
-```
-
-- **Response (200 OK)**:
-
-  ```json
-  {
-    "id": "uuid",
-    "email": "user@example.com",
-    "name": "John Doe"
-  }
-  ```
-
-### POST /api/auth/login
-
-- **Description**: Authenticates a user and returns a JWT token.
-- **Request Body (JSON)**:
-
-  ```json
-  {
-    "email": "user@example.com",
-    "password": "password123"
-  }
-  ```
-
-- **Response (200 OK)**:
-
-  ```json
-  {
-    "message": "Login successful",
-    "token": "JWT_token"
-  }
-  ```
-
----
-
 ## Conversations
-
-### GET /api/conversations
-
-- **Description**: Retrieves a list of all conversations for the logged-in user.
-- **Headers**:
-  - `Authorization`: `Bearer <JWT_token>`
-- **Response (200 OK)**:
-
-  ```json
-  [
-    {
-      "conversation_id": "uuid",
-      "is_ai": false,
-      "participants": [
-        {
-          "user_id": "uuid",
-          "name": "John Doe"
-        },
-        {
-          "user_id": "uuid",
-          "name": "Jane Smith"
-        }
-      ],
-      "last_message": "Hi, how are you?",
-      "timestamp": "2025-02-22T12:00:00Z"
-    }
-  ]
-  ```
 
 ### GET /api/conversations/{conversation_id}
 
 - **Description**: Retrieves all messages from a specific conversation.
-- **Headers**:
-  - `Authorization`: `Bearer <JWT_token>`
 - **Parameters**:
   - `conversation_id`: ID of the conversation to retrieve.
 - **Response (200 OK)**:
@@ -126,8 +48,6 @@ This document provides the API specification for a real-time chat application. T
 ### POST /api/conversations/{conversation_id}/connect
 
 - **Description**: Establishes a WebSocket connection for real-time communication in the specific conversation.
-- **Headers**:
-  - `Authorization`: `Bearer <JWT_token>`
 - **Parameters**:
   - `conversation_id`: ID of the conversation to connect to.
 - **Response (200 OK)**:
@@ -143,11 +63,9 @@ This document provides the API specification for a real-time chat application. T
 
 ## Messages
 
-### POST /api/messages
+### POST /api/messages/
 
 - **Description**: Sends a new message in a conversation.
-- **Headers**:
-  - `Authorization`: `Bearer <JWT_token>`
 - **Request Body (JSON)**:
 
   ```json
@@ -175,8 +93,6 @@ This document provides the API specification for a real-time chat application. T
 ### GET /api/users/{user_id}
 
 - **Description**: Retrieves the profile information of a user.
-- **Headers**:
-  - `Authorization`: `Bearer <JWT_token>`
 - **Parameters**:
   - `user_id`: ID of the user to retrieve the profile for.
 - **Response (200 OK)**:
@@ -190,6 +106,32 @@ This document provides the API specification for a real-time chat application. T
   }
   ```
 
+### GET /api/users/
+
+- **Description**: Retrieves all users rofiles.
+- **Response (200 OK)**:
+
+  ```json
+  [{
+    "user_id": "uuid",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "profile_picture": "https://example.com/profile.jpg"
+  }]
+  ```
+
+### POST /api/users/
+
+- **Description**: Save user rofile.
+- **Response (200 OK)**:
+- **Request Body (JSON)**:
+
+  ```json
+   {
+    "name": "user",
+    "uid": "user@example.com",
+  }
+  ```
 ---
 
 ## Error Handling
