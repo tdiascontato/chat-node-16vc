@@ -18,6 +18,18 @@ router.get("/", async (req, res) => {
 	}
 });
 
+router.post("/", async (req, res) => {
+	try {
+		const user = await prisma.user.create({
+			data: { name: req.body.name, uid: req.body.uid, createdAt: new Date() },
+		});
+
+		res.json(user);
+	} catch (error) {
+		res.status(500).json({ error: "Erro ao buscar usuário" });
+	}
+});
+
 router.get("/:id", async (req, res) => {
 	try {
 		const user = await prisma.user.findUnique({
