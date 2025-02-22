@@ -1,15 +1,5 @@
-import Database from 'better-sqlite3';
+const { PrismaClient } = require("@prisma/client");
 
-const db = new Database('users.db');
+export const db = new PrismaClient();
 
-// Making table if it doesn't exist
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    uid TEXT NOT NULL UNIQUE,
-    name TEXT NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-  )
-`);
-
-export default db;
+await db.$connect();
