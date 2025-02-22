@@ -9,18 +9,10 @@ export class OpenAiService {
 		this.assistantId = process.env.OPENAI_ASSISTANT_ID;
 	}
 
-	async createThread(username) {
+	async createThread() {
 		try {
-			const thread = await this.openai.beta.threads.create({
-				messages: [
-					{
-						role: "user",
-						content: `I'm ${username} and I started a chat with you. Hi.`,
-					},
-				],
-			});
-			const message = await this.#runAssistant(thread.id);
-			return { threadId: thread.id, message };
+			const thread = await this.openai.beta.threads.create();
+			return thread.id;
 		} catch (error) {
 			console.error("Erro ao criar thread:", error);
 			throw new Error("Falha ao criar thread");
